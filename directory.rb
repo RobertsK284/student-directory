@@ -18,7 +18,7 @@ def print_header
   puts "-------------"
 end 
 
-def print(students)
+def print_dir(students)
   students.each do |student|
     puts "#{student[:name]} (#{student[:cohort]} cohort)"
   end
@@ -30,5 +30,5 @@ end
 
 # nothing happens until we call the methods
 print_header
-print(students)
+print_dir(students)
 print_footer(students)
