@@ -24,11 +24,11 @@ def print_header
 end 
 
 def print_dir(students)
-	students.each_with_index do |student, index|
-	  if student[:name].length < 12
-	    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+  index = 0
+	  while index < students.length
+	    puts "#{index + 1}. #{students[index][:name]} (#{students[index][:cohort]} cohort)"
+	    index += 1
 	  end
-	end
 end
 
 def print_footer(names)
