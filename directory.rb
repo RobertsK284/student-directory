@@ -39,8 +39,13 @@ def print_header
 end 
 
 def print_dir(students)
+  lineWidth = 70 
   students.each do |student|
-    puts "#{student[:name]}, hobby: #{student[:hobby]}, country of birth: #{student[:country]}, height: #{student[:height]}, (#{student[:cohort]} cohort)"
+    puts "#{student[:name]}".center(lineWidth)
+    puts "hobby: #{student[:hobby]}".center(lineWidth)
+    puts "country of birth: #{student[:country]}".center(lineWidth)
+    puts "height: #{student[:height]}".center(lineWidth)
+    puts "(#{student[:cohort]} cohort)\n".center(lineWidth)
     end
 end
 
