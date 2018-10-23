@@ -24,17 +24,9 @@ def print_header
 end 
 
 def print_dir(students)
-	while true do
-	  puts "To view students with names beginning with a letter, please type in a letter."
-	  letter = gets.chomp.downcase
-	  alphabet = "abcdefghijklmnopqrstuvwxyz".chars
-	    if alphabet.include?(letter)
-	      break
-	    end
-	end
-	students.each do |student|
-	  if student[:name][0].downcase == letter 
-	    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+	students.each_with_index do |student, index|
+	  if student[:name].length < 12
+	    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
 	  end
 	end
 end
