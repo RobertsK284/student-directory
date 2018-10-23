@@ -5,14 +5,29 @@ def input_students
   students = []
   # get the first name
   name = gets.chomp
-
-  while !name.empty? do
+  # get hobby
+  puts "Please enter the student's hobby"
+  hobby = gets.chomp
+  # get country of birth
+  puts "Please enter the student's country of birth"
+  country = gets.chomp
+  # get height
+  puts "Please enter the student's height"
+  height = gets.chomp
+  # while the name is not empty, repeat this code
+  while !name.empty? && !hobby.empty? && !country.empty? && !height.empty? do
     # add the student hash to the array
-    students << {name: name, cohort: :november}
+    students << {name: name, hobby: hobby, country: country, height: height, cohort: :november}
     puts "Now we have #{students.count} students"
-    # get another name from the user
+    # get another set of student data from the user
     puts "Please enter the name of the student"
     name = gets.chomp
+    puts "Please enter the student's hobby"
+    hobby = gets.chomp
+    puts "Please enter the student's country of birth"
+    country = gets.chomp
+    puts "Please enter the student's height"
+    height = gets.chomp
   end
   # return the array of students
   students
@@ -24,11 +39,9 @@ def print_header
 end 
 
 def print_dir(students)
-  index = 0
-	  while index < students.length
-	    puts "#{index + 1}. #{students[index][:name]} (#{students[index][:cohort]} cohort)"
-	    index += 1
-	  end
+  students.each do |student|
+    puts "#{student[:name]}, hobby: #{student[:hobby]}, country of birth: #{student[:country]}, height: #{student[:height]}, (#{student[:cohort]} cohort)"
+    end
 end
 
 def print_footer(names)
