@@ -65,9 +65,10 @@ end
 
 def print_dir(students)
 
-  months = ["January", "February", "March", "April", "May", "June", "July", 
-           "August", "September", "October", "November", "December"]
-
+# create array of cohorts
+  months = students.map {|s| s[:cohort] }
+  months.uniq!
+ 
   # go through the months array and see if a month matches anything in the 
   # cohort key in the students array
 
@@ -77,11 +78,8 @@ def print_dir(students)
     
     # get list of student names
     student_list.map! { |student| student[:name] }
-
-      if !student_list.empty?
-        puts month
-        puts student_list.join(", ")
-      end 
+      puts month
+      puts student_list.join(", ")
   end  
 end  
 
