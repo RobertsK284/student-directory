@@ -5,14 +5,14 @@ def input_students
   students = []
   # get the first name
   name = ""
-  name_input = gets.chomp
+  name_input = gets.strip
   
   check_name = Proc.new { |name_to_check|
     while true do
       # pattern = [-'a-zA-Z\s]
       name = name_to_check; break if name_to_check.match?(/[-'a-zA-Z\s]/) || name_to_check == ""
       puts "Please ensure you have entered the student's name correctly."
-      name_to_check = gets.chomp
+      name_to_check = gets.strip
     end
   }
   
@@ -21,7 +21,7 @@ def input_students
   # set up cohort variable and get the cohort
   cohort = ""
   puts "Please enter the student's cohort"
-  month = gets.capitalize.chomp
+  month = gets.capitalize.strip
   
   check_month = Proc.new { |month_to_check|
     # create an array of months
@@ -32,7 +32,7 @@ def input_students
       cohort = month_to_check; break if months.include?(month_to_check)
       cohort = :November; break if month_to_check == "" || month_to_check == nil
       puts "Please enter the student's cohort correctly"
-      month_to_check = gets.capitalize.chomp
+      month_to_check = gets.capitalize.strip
     end
   }
   
@@ -47,12 +47,12 @@ def input_students
     # get another set of student data from the user
     puts "Please enter the name of the student"
     name = ""
-    name_input = gets.chomp
+    name_input = gets.strip
     check_name.call(name_input)
     # set up cohort variable and get the cohort
     cohort = ""
     puts "Please enter the student's cohort"
-    month = gets.capitalize.chomp
+    month = gets.capitalize.strip
     check_month.call(month)
   end
   # return the array of students
