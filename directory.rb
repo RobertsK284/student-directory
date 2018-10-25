@@ -42,7 +42,8 @@ def input_students
   while !name.empty? && !cohort.empty? do
     # add the student hash to the array
     students << {name: name, cohort: cohort}
-    puts "Now we have #{students.count} students"
+    puts "Now we have #{students.count} student" if students.count == 1
+    puts "Now we have #{students.count} students" if students.count != 1
     # get another set of student data from the user
     puts "Please enter the name of the student"
     name = ""
@@ -84,7 +85,8 @@ def print_dir(students)
 end  
 
 def print_footer(names)
-  print "Overall, we have #{names.count} great students"
+  puts "Overall, we have #{names.count} great students" if names.count != 1
+  puts "Overall, we have #{names.count} great student" if names.count == 1
 end
 
 students = input_students
