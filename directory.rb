@@ -28,12 +28,12 @@ def input_students
     months = ["January", "February", "March", "April", "May", "June", "July", 
   "August", "September", "October", "November", "December"]
 
-  while true do
-    cohort = month_to_check; break if months.include?(month_to_check)
-    cohort = :November; break if month_to_check == "" || month_to_check == nil
-    puts "Please enter the student's cohort correctly"
-    month_to_check = gets.capitalize.chomp
-  end
+    while true do
+      cohort = month_to_check; break if months.include?(month_to_check)
+      cohort = :November; break if month_to_check == "" || month_to_check == nil
+      puts "Please enter the student's cohort correctly"
+      month_to_check = gets.capitalize.chomp
+    end
   }
   
   check_month.call(month)
@@ -64,12 +64,26 @@ def print_header
 end 
 
 def print_dir(students)
-  lineWidth = 70 
-  students.each do |student|
-    puts "#{student[:name]}".center(lineWidth)
-    puts "(#{student[:cohort]} cohort)\n".center(lineWidth)
-  end
-end
+
+  months = ["January", "February", "March", "April", "May", "June", "July", 
+           "August", "September", "October", "November", "December"]
+
+  # go through the months array and see if a month matches anything in the 
+  # cohort key in the students array
+
+  months.each do |month|
+    # get list of students matching the month
+    student_list = students.select { |student| student[:cohort] == month }
+    
+    # get list of student names
+    student_list.map! { |student| student[:name] }
+
+      if !student_list.empty?
+        puts month
+        puts student_list.join(", ")
+      end 
+  end  
+end  
 
 def print_footer(names)
   print "Overall, we have #{names.count} great students"
@@ -79,5 +93,6 @@ students = input_students
 
 # nothing happens until we call the methods
 print_header
+
 print_dir(students)
 print_footer(students)
