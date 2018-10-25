@@ -1,37 +1,45 @@
-def interactive_menu
-  students = []
-  loop do
+@students = []
+
+def print_menu
     # 1. print the menu and ask the user what to do
     puts "1. Input the students"
     puts "2. Show the students"
     puts "9. Exit"
-  
-    # 2. read the input and save it into a variable
-    selection = gets.chomp
-  
-    # 3. do what the user has asked
-    case selection
+end
+
+def process(selection)
+  case selection
     when "1"
       # input the student
-      students = input_students(students)
+      input_students
     when "2"
       # show the students
-      if !students.empty?
-        print_header
-        print_dir(students)
-        print_footer(students)
-      else
-        puts "There are no students"
-      end
+      show_students
     when "9"
       exit # this will cause the program to terminate
     else
       puts "I don't know what you meant, try again"
-    end
   end
 end
 
-def input_students(students)
+def show_students
+  if !@students.empty?
+    print_header
+    print_students_list
+    print_footer
+  else
+    puts "There are no students"
+  end 
+end
+
+def interactive_menu
+  loop do
+    print_menu
+    process(gets.chomp)
+  end
+end
+
+def input_students
   puts "Please enter the name of the student"
   puts "To finish, just hit return twice"
   # create an empty array
@@ -73,9 +81,8 @@ def input_students(students)
   # while the name is not empty, repeat this code
   while !name.empty? && !cohort.empty? do
     # add the student hash to the array
-    students << {name: name, cohort: cohort}
-    puts "Now we have #{students.count} student" if students.count == 1
-    puts "Now we have #{students.count} students" if students.count != 1
+    @students << {name: name, cohort: cohort}
+    puts "Now we have #{@students.count} students"
     # get another set of student data from the user
     puts "Please enter the name of the student"
     name = ""
@@ -87,38 +94,22 @@ def input_students(students)
     month = gets.capitalize.strip
     check_month.call(month)
   end
-  # return the array of students
-  students
+
 end
 
 def print_header
   puts "The students of Villains Academy"
-  puts "-------------"
+  puts "---------------------------------"
 end 
 
-def print_dir(students)
+def print_students_list
+  @students.each do |student|
+    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+  end
+end
 
-# create array of cohorts
-  months = students.map {|s| s[:cohort] }
-  months.uniq!
- 
-  # go through the months array and see if a month matches anything in the 
-  # cohort key in the students array
-
-  months.each do |month|
-    # get list of students matching the month
-    student_list = students.select { |student| student[:cohort] == month }
-    
-    # get list of student names
-    student_list.map! { |student| student[:name] }
-      puts month
-      puts student_list.join(", ")
-  end  
-end  
-
-def print_footer(names)
-  puts "Overall, we have #{names.count} great students" if names.count != 1
-  puts "Overall, we have #{names.count} great student" if names.count == 1
+def print_footer
+  puts "Overall, we have #{@students.count} great students"
 end
 
 # nothing happens until we call the methods
