@@ -4,30 +4,55 @@ def input_students
   # create an empty array
   students = []
   # get the first name
-  name = gets.chomp
-  # get hobby
-  puts "Please enter the student's hobby"
-  hobby = gets.chomp
-  # get country of birth
-  puts "Please enter the student's country of birth"
-  country = gets.chomp
-  # get height
-  puts "Please enter the student's height"
-  height = gets.chomp
+  name = ""
+  name_input = gets.chomp
+  
+  check_name = Proc.new { |name_to_check|
+    while true do
+      # pattern = [-'a-zA-Z\s]
+      name = name_to_check; break if name_to_check.match?(/[-'a-zA-Z\s]/) || name_to_check == ""
+      puts "Please ensure you have entered the student's name correctly."
+      name_to_check = gets.chomp
+    end
+  }
+  
+  check_name.call(name_input)
+  
+  # set up cohort variable and get the cohort
+  cohort = ""
+  puts "Please enter the student's cohort"
+  month = gets.capitalize.chomp
+  
+  check_month = Proc.new { |month_to_check|
+    # create an array of months
+    months = ["January", "February", "March", "April", "May", "June", "July", 
+  "August", "September", "October", "November", "December"]
+
+  while true do
+    cohort = month_to_check; break if months.include?(month_to_check)
+    cohort = :November; break if month_to_check == "" || month_to_check == nil
+    puts "Please enter the student's cohort correctly"
+    month_to_check = gets.capitalize.chomp
+  end
+  }
+  
+  check_month.call(month)
+  
   # while the name is not empty, repeat this code
-  while !name.empty? && !hobby.empty? && !country.empty? && !height.empty? do
+  while !name.empty? && !cohort.empty? do
     # add the student hash to the array
-    students << {name: name, hobby: hobby, country: country, height: height, cohort: :november}
+    students << {name: name, cohort: cohort}
     puts "Now we have #{students.count} students"
     # get another set of student data from the user
     puts "Please enter the name of the student"
-    name = gets.chomp
-    puts "Please enter the student's hobby"
-    hobby = gets.chomp
-    puts "Please enter the student's country of birth"
-    country = gets.chomp
-    puts "Please enter the student's height"
-    height = gets.chomp
+    name = ""
+    name_input = gets.chomp
+    check_name.call(name_input)
+    # set up cohort variable and get the cohort
+    cohort = ""
+    puts "Please enter the student's cohort"
+    month = gets.capitalize.chomp
+    check_month.call(month)
   end
   # return the array of students
   students
@@ -42,11 +67,8 @@ def print_dir(students)
   lineWidth = 70 
   students.each do |student|
     puts "#{student[:name]}".center(lineWidth)
-    puts "hobby: #{student[:hobby]}".center(lineWidth)
-    puts "country of birth: #{student[:country]}".center(lineWidth)
-    puts "height: #{student[:height]}".center(lineWidth)
     puts "(#{student[:cohort]} cohort)\n".center(lineWidth)
-    end
+  end
 end
 
 def print_footer(names)
