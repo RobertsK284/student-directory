@@ -45,7 +45,8 @@ def input_students
   # while the name is not empty, repeat this code
   while !name.empty? do
     # add the student hash to the array
-    @students << {name: name, cohort: :november}
+    cohort = :november
+    add_to_hash(name, cohort)
     puts "Now we have #{@students.count} students"
     # get another set of student data from the user
     puts "Please enter the name of the student"
@@ -53,6 +54,9 @@ def input_students
   end
 end
 
+def add_to_hash(name, cohort)
+  @students << {name: name, cohort: cohort.to_sym}
+end
 def show_students
   print_header
   print_students_list
@@ -90,7 +94,7 @@ def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort = line.chomp.split(',')
-    @students << {name: name, cohort: cohort.to_sym}
+    add_to_hash(name, cohort)
   end
   file.close
 end
