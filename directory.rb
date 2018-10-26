@@ -3,7 +3,7 @@
 def interactive_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -27,7 +27,7 @@ def process(selection)
     when "3"
       save_students
     when "4"
-      load_students
+      load_students # will load from students.csv by default
     when "9"
       exit # this will cause the program to terminate
     else
@@ -41,14 +41,14 @@ def input_students
   # create an empty array
   # get the first name
   name = ""
-  name_input = gets.chomp
+  name_input = STDIN.gets.chomp
   
   check_name = Proc.new { |name_to_check|
     while true do
       # pattern = [-'a-zA-Z\s]
       name = name_to_check; break if name_to_check.match?(/[-'a-zA-Z\s]/) || name_to_check == ""
       puts "Please ensure you have entered the student's name correctly."
-      name_to_check = gets.chomp
+      name_to_check = STDIN.gets.chomp
     end   }
   
   check_name.call(name_input)
@@ -56,7 +56,7 @@ def input_students
   # set up cohort variable and get the cohort
   cohort = ""
   puts "Please enter the student's cohort"
-  month = gets.capitalize.chomp
+  month = STDIN.gets.capitalize.chomp
   
   check_month = Proc.new { |month_to_check|
     # create an array of months
@@ -67,7 +67,7 @@ def input_students
       cohort = month_to_check; break if months.include?(month_to_check)
       cohort = :November; break if month_to_check == "" || month_to_check == nil
       puts "Please enter the student's cohort correctly"
-      month_to_check = gets.capitalize.chomp
+      month_to_check = STDIN.gets.capitalize.chomp
     end  }
   
   check_month.call(month)
@@ -80,12 +80,12 @@ def input_students
     # get another set of student data from the user
     puts "Please enter the name of the student"
     name = ""
-    name_input = gets.chomp
+    name_input = STDIN.gets.chomp
     check_name.call(name_input)
     # set up cohort variable and get the cohort
     cohort = ""
     puts "Please enter the student's cohort"
-    month = gets.capitalize.chomp
+    month = STDIN.gets.capitalize.chomp
     check_month.call(month)
   end
 end
@@ -127,14 +127,27 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv") 
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort = line.chomp.split(',')
     @students << {name: name, cohort: cohort.to_sym}
   end
   file.close
 end
+
+def try_load_students
+  filename = ARGV.first # first argument from the command line
+  return if filename.nil? # get out of the method if it isn't given
+  if File.exists?(filename) # if it exists
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else # if it doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit # quit the program
+  end
+end
 # nothing happens until we call the methods
 
+try_load_students
 interactive_menu
