@@ -57,6 +57,7 @@ end
 def add_to_hash(name, cohort)
   @students << {name: name, cohort: cohort.to_sym}
 end
+
 def show_students
   print_header
   print_students_list
