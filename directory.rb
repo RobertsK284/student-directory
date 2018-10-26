@@ -84,6 +84,12 @@ def save_students
     csv_line = student_data.join(",")
     file.puts csv_line
   end
+  if @students.count == 0
+    puts "There were no student records to save"
+  else
+    @students.count == 1 ? plural_or_single = "" : plural_or_single = "s"
+    puts "Saved #{@students.count} record#{plural_or_single} to students.csv"
+  end
   file.close
 end
 
@@ -95,6 +101,11 @@ def load_students(filename = "students.csv")
       name, cohort = line.chomp.split(',')
       add_to_hash(name, cohort)
     end
+    if @students.count > 0
+      puts "Loaded #{@students.count} from #{filename}"
+    else 
+      puts "There were no students in #{filename}"
+    end
   end
   file.close
 end
@@ -104,7 +115,6 @@ def load_students_at_startup
   if filename.nil? || File.exists?(filename) # if no file given or if it exists
     filename ||= "students.csv"
     load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
   else # if it doesn't exist
     puts "Sorry, #{filename} doesn't exist."
     exit # quit the program
