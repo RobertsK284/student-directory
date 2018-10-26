@@ -93,16 +93,18 @@ end
 
 def load_students(filename = "students.csv") 
   file = File.open(filename, "r")
-  file.readlines.each do |line|
-    name, cohort = line.chomp.split(',')
-    add_to_hash(name, cohort)
+  if !File.zero?(filename)
+    file.readlines.each do |line|
+      name, cohort = line.chomp.split(',')
+     add_to_hash(name, cohort)
+    end
   end
   file.close
 end
 
 def try_load_students
   filename = ARGV.first # first argument from the command line
-  if filename.nil? || File.exists?(filename)
+  if filename.nil? || File.exists?(filename) # if no file given or if it exists
     filename ||= "students.csv"
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
