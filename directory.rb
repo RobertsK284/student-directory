@@ -1,9 +1,9 @@
 @students = []
 
-def interactive_menu
+def main_program
   loop do
     print_menu
-    process(STDIN.gets.chomp)
+    menu_navigation(STDIN.gets.chomp)
   end
 end
 
@@ -16,7 +16,7 @@ def print_menu
     puts "9. Exit"
 end
 
-def process(selection)
+def menu_navigation(selection)
   case selection
     when "1"
       # input the student
@@ -36,21 +36,17 @@ def process(selection)
 end
 
 def input_students
-  puts "Please enter the name of the student"
-  puts "To finish, just hit return twice"
-  # create an empty array
-  # get the first name
-  name = STDIN.gets.chomp
-  
   # while the name is not empty, repeat this code
-  while !name.empty? do
+  while true do
+    # get the name
+    puts "Please enter the name of the student"
+    puts "To finish, just hit return twice"
+    name = STDIN.gets.chomp
+    break if name.empty?
     # add the student hash to the array
     cohort = :november
     add_to_hash(name, cohort)
     puts "Now we have #{@students.count} students"
-    # get another set of student data from the user
-    puts "Please enter the name of the student"
-    name = STDIN.gets.chomp
   end
 end
 
@@ -94,15 +90,16 @@ end
 def load_students(filename = "students.csv") 
   file = File.open(filename, "r")
   if !File.zero?(filename)
+    @students = []
     file.readlines.each do |line|
       name, cohort = line.chomp.split(',')
-     add_to_hash(name, cohort)
+      add_to_hash(name, cohort)
     end
   end
   file.close
 end
 
-def try_load_students
+def load_students_at_startup
   filename = ARGV.first # first argument from the command line
   if filename.nil? || File.exists?(filename) # if no file given or if it exists
     filename ||= "students.csv"
@@ -115,5 +112,5 @@ def try_load_students
 end
 # nothing happens until we call the methods
 
-try_load_students
-interactive_menu
+load_students_at_startup
+main_program
