@@ -27,11 +27,11 @@ def menu_navigation(selection)
     when "3"
       load_or_save = "save to" 
       choose_filename(load_or_save) # asks user to choose a save filename
-      save_students(@filename) # will save to the user's chosen file
+      save_students # will save to the user's chosen file
     when "4"
       load_or_save = "load from"
       choose_filename(load_or_save) # asks user to choose a load filename
-      load_students(@filename) # will load from the user's chosen file
+      load_students # will load from the user's chosen file
     when "9"
       exit # this will cause the program to terminate
     else
@@ -84,50 +84,54 @@ def choose_filename(load_or_save)
   @filename = STDIN.gets.chomp
 end
 
-def save_students(filename)
+def save_students
   # open the file for writing
-  file = File.open(filename, "w")
+  File.open(@filename, "w") { |file|
   # iterate over the array of students
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
-  end
+    @students.each do |student|
+      student_data = [student[:name], student[:cohort]]
+      csv_line = student_data.join(",")
+      file.puts csv_line
+    end
+  } # file = File.open(@filename, "w")
+  
   if @students.count == 0
     puts "There were no student records to save"
   else
     @students.count == 1 ? plural_or_single = "" : plural_or_single = "s"
-    puts "Saved #{@students.count} record#{plural_or_single} to #{filename}"
+    puts "Saved #{@students.count} record#{plural_or_single} to #{@filename}"
   end
-  file.close
 end
 
-def load_students(filename) 
-  file = File.open(filename, "r")
-  if !File.zero?(filename)
-    @students = []
+def load_students 
+  @students = []
+  
+  File.open(@filename, "r") {|file|
+  if !File.zero?(@filename)
     file.readlines.each do |line|
       name, cohort = line.chomp.split(',')
       add_to_hash(name, cohort)
     end
-    if @students.count > 0
-      puts "Loaded #{@students.count} from #{filename}"
-    else 
-      puts "There were no students in #{filename}"
-    end
   end
-  file.close
+  } # File.open(@filename, "r")
+  
+  if @students.count > 0
+    puts "Loaded #{@students.count} from #{@filename}"
+  else 
+    puts "There were no students in #{@filename}"
+  end
 end
 
 def load_students_at_startup
-  filename = ARGV.first # first argument from the command line
-  if filename.nil? # if no file given
-    save_students("students.csv") # create a students.csv file
-    return
-  elsif File.exists?(filename) # if no file exists
-     load_students(filename)
+  @filename = ARGV.first # first argument from the command line
+  if @filename.nil? # if no file given but students.csv exists in the folder
+    @filename = "students.csv"
+  end  
+  
+  if File.exists?(@filename) # if file exists
+     load_students
   else # if it doesn't exist
-    puts "Sorry, #{filename} doesn't exist."
+    puts "Sorry, #{@filename} doesn't exist, can't load students."
     exit # quit the program
   end
 end
