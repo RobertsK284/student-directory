@@ -1,3 +1,4 @@
+require 'csv'
 @students = []
 
 def main_program
@@ -86,15 +87,15 @@ end
 
 def save_students
   # open the file for writing
-  File.open(@filename, "w") { |file|
+  CSV.open(@filename, "wb") do |csv|
+
   # iterate over the array of students
     @students.each do |student|
       student_data = [student[:name], student[:cohort]]
-      csv_line = student_data.join(",")
-      file.puts csv_line
+      csv << student_data
     end
-  } # file = File.open(@filename, "w")
-  
+  end
+
   if @students.count == 0
     puts "There were no student records to save"
   else
@@ -105,16 +106,13 @@ end
 
 def load_students 
   @students = []
-  
-  File.open(@filename, "r") {|file|
   if !File.zero?(@filename)
-    file.readlines.each do |line|
-      name, cohort = line.chomp.split(',')
-      add_to_hash(name, cohort)
+    CSV.foreach(@filename) do |row|
+     name, cohort = row[0], row[1]
+     add_to_hash(name, cohort)
     end
   end
-  } # File.open(@filename, "r")
-  
+
   if @students.count > 0
     puts "Loaded #{@students.count} from #{@filename}"
   else 
